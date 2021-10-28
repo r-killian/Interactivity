@@ -7,7 +7,7 @@ output:
     theme: cerulean
 ---
 
-THis page is about making some Plotly examples
+This page is about making some Plotly examples
 
 ```{r}
 library(tidyverse)
@@ -27,22 +27,57 @@ scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
-
+Let's look atNYC airbnb data
 
 ```{r}
-data(nyc_airbnb)
+data("nyc_airbnb")
 
 nyc_airbnb = 
   nyc_airbnb %>% 
-  mutate(rating = review_scores_location / 2) %>%
+  mutate(stars = review_scores_location / 2) %>%
   select(
-    neighbourhood_group, neighbourhood, rating, price, room_type, lat, long) %>%
+    neighbourhood_group, neighbourhood, stars, price, room_type, lat, long) %>%
   filter(
-    !is.na(rating), 
     neighbourhood_group == "Manhattan",
     room_type == "Entire home/apt",
-    price %in% 100:500)
+    price %in% 100:500) %>% 
+  drop_na(stars)
 ```
+
+## Make a scatterplot
+
+Here's a plotly scatterplot!
+
+```{r}
+nyc_airbnb %>% 
+  plot_ly(
+    x = ~lat, y = ~long, type = "scatter", mode = "markers"
+  )
+```
+
+
+```{r}
+nyc_airbnb %>% 
+  plot_ly(
+    x = ~lat, y = ~long, type = "scatter", mode = "markers", color = ~price, alpha = .5
+  )
+```
+
+
+```{r}
+nyc_airbnb %>% 
+  mutate(
+    text_label = str_c("Price: $", price, "\nStars:", stars)
+  ) %>% 
+  plot_ly(
+    x = ~lat, y = ~long, type = "scatter", mode = "markers", color = ~price, text = ~text_label, alpha = .5
+  )
+```
+
+
+
+
+
 
 
 
