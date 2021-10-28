@@ -81,6 +81,31 @@ nyc_airbnb %>%
     y = ~price, color = ~neighbourhood, type = "box", colors = "viridis")
 ```
 
+## Barcharts
+
+```{r}
+nyc_airbnb %>% 
+  count(neighbourhood) %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
+  plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar", colors = "viridis")
+```
+
+The first 3 lines of above code: group by and sum counting up how many airbnb are in each neighborhood then reordering according to n
+
+plotly.com!!!
+
+## ggplotly
+
+```{r}
+gg_lat_long = 
+nyc_airbnb %>% 
+  ggplot(aes(x = lat, y = long, color = price)) +
+  geom_point()
+
+ggplotly(gg_lat_long)
+```
+
+You *can* do this but why? It doesn't format as nicely so if you are showing this to someone else probs just go to plotly.com and look up the syntax to make it in plotly directly.
 
 
 
